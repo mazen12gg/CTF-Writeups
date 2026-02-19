@@ -1,5 +1,4 @@
 # CTF-Writeups
-# CTF Writeups
 
 This repository contains my CTF challenge writeups.
 
