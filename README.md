@@ -1,28 +1,18 @@
 # CTF-Writeups
-# picoCTF Writeups
+# CTF Writeups
 
-This repository contains my writeups for picoCTF challenges.
+This repository contains my CTF challenge writeups.
 
-I am focusing on improving my practical cybersecurity skills by solving challenges in different categories.
+## Focus Areas
 
----
+- Web Exploitation
+- Cryptography
+- Digital Forensics
 
-## Categories
+## Objective
 
-- 🌐 Web Exploitation
-- 🔐 Cryptography
-- 🧪 Forensics
-
----
-
-## Goal
-
-To strengthen my understanding of:
-- Web vulnerabilities
-- Cryptographic concepts
-- Digital forensics techniques
+To document my problem-solving process and continuously improve my practical cybersecurity skills.
 
 ---
 
-⚠️ Note:
-These writeups are for educational purposes only.
+Disclaimer: All writeups are shared for educational purposes only.
