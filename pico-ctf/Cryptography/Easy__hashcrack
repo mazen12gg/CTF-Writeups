@@ -1,1 +1,63 @@
+Challenge Name: hashcrack
+
+Category: Cryptography
+Difficulty: Easy
+
+--------------------
+
+Description:
+A company stored a secret message on a server which got breached due to the admin using weakly hashed passwords. Can you gain access to the secret stored within the server?
+
+--------------------
+
+Solution
+Step 1 – Connect to the Service:
+nc verbal-sleep.picoctf.net 53031
+
+After connecting:
+
+Welcome!! Looking For the Secret?
+
+--------------------
+
+Step 2 – Crack the First Hash (MD5)
+
+Hash:
+482c811da5d5b4bc6d497ffa98491e38
+
+Cracked password:
+password123
+
+Server response:
+Correct! You've cracked the MD5 hash with no secret found!
+
+--------------------
+
+Step 3 – Crack the Second Hash (SHA-1)
+
+Hash:
+b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3
+
+Cracked password:
+letmein
+
+Server response:
+Correct! You've cracked the SHA-1 hash with no secret found!
+
+--------------------
+
+Step 4 – Crack the Third Hash (SHA-256)
+
+Hash:
+916e8c4f79b25028c9e467f1eb8eee6d6bbdff965f9928310ad30a8d88697745
+
+Cracked password:
+qwerty098
+
+Server response:
+Correct! You've cracked the SHA-256 hash with a secret found.
+The flag is: picoCTF{UseStr0nG_h@shEs_&PaSswDs!_93e052d7}
+
+Final Flag:
+picoCTF{UseStr0nG_h@shEs_&PaSswDs!_93e052d7}
 
