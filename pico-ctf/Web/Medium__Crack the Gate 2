@@ -1,1 +1,49 @@
+Challenge Name: Crack the Gate 2
 
+Challenge Information:
+- Category: Web Exploitation  
+- Difficulty: Medium  
+
+---
+
+Objective:
+The goal of this challenge is to bypass the IP-based rate-limiting restriction and successfully authenticate.
+
+---
+
+Exploitation Steps:
+
+1- Bypassing the IP-Based Rate Limit
+Since the application appeared to trust user-controlled headers, I leveraged the `X-Forwarded-For` header to manipulate the source IP address.
+
+The idea was to send each login attempt with a different IP value in order to bypass the rate-limiting restriction.
+
+---
+
+2- Automating the Attack
+I intercepted the login request using **Burp Suite** and sent it to **Intruder**.
+
+To synchronize password attempts with changing IP addresses, I selected the **Pitchfork attack** type.
+
+This allowed me to:
+
+- Assign one payload position to the `X-Forwarded-For` header (IP list)
+- Assign another payload position to the password field (password list)
+- Ensure that for every password attempt, a new IP address was used simultaneously
+
+---
+
+3- Identifying the Correct Password
+After launching the attack, I analyzed the responses.
+
+I monitored the **response length** column and noticed that:
+
+- Most responses had identical content length (failed login attempts)
+- One response had a different length
+
+That deviation indicated a successful authentication attempt.
+
+---
+
+4- Retrieving the Flag
+Using the identified password, I logged in successfully and retrieved the hidden flag.
